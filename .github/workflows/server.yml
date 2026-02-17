@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: zunaied/scripts@main
+        uses: actions/checkout@v3
 
       - name: Fetch Teleport binaries
         uses: teleport-actions/setup@v1
@@ -22,7 +22,7 @@ jobs:
       - name: Export SSH config via tbot
         run: tbot start --oneshot -c ./action_support/server_bot.yaml
 
-      - name: Install sysstat and run mpstat on Rocky
+      - name: Install sysstat and run mpstat
         run: |
           ssh -F ./ssh_out/ssh_config tigerit@myinstance.192.168.4.77 \
           "command -v mpstat >/dev/null || sudo dnf install -y sysstat; mpstat 1 5"
