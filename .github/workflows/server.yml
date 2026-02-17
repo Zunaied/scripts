@@ -6,7 +6,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    name: Check resource usage on Rocky Linux server
+    name: Check resource usage on Rocky server
     runs-on: ubuntu-latest
 
     steps:
@@ -14,20 +14,15 @@ jobs:
         uses: zunaied/scripts@main
 
       - name: Fetch Teleport binaries
-        uses: zunaied/scripts@main
+        uses: teleport-actions/setup@v1
         with:
           proxy: 192.168.4.77:3080
           version: auto
 
-      - name: Export SSH config using tbot
-        run: tbot start --oneshot -c ./tbot.yaml
+      - name: Export SSH config via tbot
+        run: tbot start --oneshot -c ./action_support/server_bot.yaml
 
-      - name: Install sysstat if missing (Rocky Linux)
+      - name: Install sysstat and run mpstat on Rocky
         run: |
-          ssh -F ./ssh_out/ssh_config rocky@myinstance.example.teleport.sh \
-          "sudo dnf install -y sysstat"
-
-      - name: Run mpstat
-        run: |
-          ssh -F ./ssh_out/ssh_config rocky@myinstance.example.teleport.sh \
-          "mpstat 1 5"
+          ssh -F ./ssh_out/ssh_config tigerit@myinstance.192.168.4.77 \
+          "command -v mpstat >/dev/null || sudo dnf install -y sysstat; mpstat 1 5"
