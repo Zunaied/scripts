@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: zunaied/scripts
+        uses: zunaied/scripts@main
 
       - name: Fetch Teleport binaries
-        uses: zunaied/scripts
+        uses: zunaied/scripts@main
         with:
           proxy: 192.168.4.77:3080
           version: auto
